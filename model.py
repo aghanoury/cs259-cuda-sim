@@ -78,25 +78,16 @@ other_parameters = {
 }
 
 
-if __name__ == "__main__":
-    # print something
-
-    total_ops = (
-        layer_parameters[1]["dimx"]
-        / kernel_parameters["stridex"]
-        * layer_parameters[1]["dimy"]
-        / kernel_parameters["stridey"]
-        * layer_parameters[1]["depth"]
-        * kernel_parameters["x"]
-        * kernel_parameters["y"]
-        * kernel_parameters["depth"]
-    )
-    ideal_execution_time = (
-        total_ops * system_latency_parameters["multiply"] * time_units
-    )
-    print("Calculations required for layer 1: ", total_ops)
-    print("total execution time: {} ns".format(round(ideal_execution_time, 4)))
-
-
-# w	h	c	n (elem / batch)	k	f_w	f_h	pad_w	pad_h	stride_w	stride_h	precision	fwd_time(usec)	fwd_algo	Ops (mill)
-# 14	14	512	1	512	3	3	1	1	1	1	float	186	WINOGRAD	925
+total_ops = (
+    layer_parameters[1]["dimx"]
+    / kernel_parameters["stridex"]
+    * layer_parameters[1]["dimy"]
+    / kernel_parameters["stridey"]
+    * layer_parameters[1]["depth"]
+    * kernel_parameters["x"]
+    * kernel_parameters["y"]
+    * kernel_parameters["depth"]
+)
+ideal_execution_time = total_ops * system_latency_parameters["multiply"] * time_units
+print("Calculations required for layer 1: ", total_ops)
+print("total execution time: {} ns".format(round(ideal_execution_time, 4)))
