@@ -87,6 +87,87 @@ layer1_ops = (
     * kernel_parameters["y"]
     * kernel_parameters["depth"]
 )
-ideal_execution_time = layer1_ops * system_latency_parameters["multiply"] * time_units
+ideal_execution_time = layer1_ops * \
+    system_latency_parameters["multiply"] * time_units
 print("Calculations required for layer 1: ", layer1_ops)
 print("total execution time: {} ns".format(round(ideal_execution_time, 4)))
+
+
+# pseudo performance calc method
+def calculate_performance(kernel_parameters, layer_parameters, system_latency_parameters):
+    # Perform computations for each layer
+    total_ops = 0
+    total_execution_time = 0
+
+    for layer in layer_parameters:
+        layer_params = layer_parameters[layer]
+        if layer_params["type"] == "conv":
+            ops = (
+                layer_params["dimx"]
+                / kernel_parameters["stridex"]
+                * layer_params["dimy"]
+                / kernel_parameters["stridey"]
+                * layer_params["depth"]
+                * kernel_parameters["x"]
+                * kernel_parameters["y"]
+                * kernel_parameters["depth"]
+            )
+        elif layer_params["type"] == "pool":
+            ops = 0  # Perform calculations specific to pooling layers
+            # Add the necessary equations for pooling layer computations
+
+        total_ops += ops
+
+    # Calculate the ideal execution time
+    ideal_execution_time = total_ops * system_latency_parameters["multiply"]
+
+    return total_ops, ideal_execution_time
+
+
+# Random parameters
+kernel_parameters = {
+    "x": 5,
+    "y": 5,
+    "depth": 32,
+    "padding": 3,
+    "stridex": 1,
+    "stridey": 1,
+}
+
+layer_parameters = {
+    1: {
+        "type": "conv",
+        "dimx": 256,
+        "dimy": 256,
+        "depth": 3,
+    },
+    2: {
+        "type": "conv",
+        "dimx": 128,
+        "dimy": 128,
+        "depth": 32,
+    },
+    3: {
+        "type": "pool",
+        "dimx": 64,
+        "dimy": 64,
+        "depth": 32,
+    },
+    # Add more layer parameters as needed
+}
+
+system_latency_parameters = {
+    "multiply": 1,
+    "add": 1,
+    "scratchpad_mem_access": 1,
+    "local_mem_access": 1,
+}
+
+# Calculate performance metrics
+total_ops, ideal_execution_time = calculate_performance(
+    kernel_parameters, layer_parameters, system_latency_parameters
+)
+
+# Print the results
+print("Total operations: ", total_ops)
+print("Ideal execution time: {} ns".format(round(ideal_execution_time, 4)))
