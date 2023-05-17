@@ -94,6 +94,10 @@ print("total execution time: {} ns".format(round(ideal_execution_time, 4)))
 
 
 # pseudo performance calc method
+# the calculate_performance function takes the kernel parameters,
+# layer parameters, and system latency parameters as inputs.
+# It iterates over each layer, performs the necessary computations based on the layer type, and accumulates the total number of operations (total_ops).
+# The ideal execution time is calculated by multiplying the total number of operations with the system latency parameter.
 def calculate_performance(kernel_parameters, layer_parameters, system_latency_parameters):
     # Perform computations for each layer
     total_ops = 0
