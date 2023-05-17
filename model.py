@@ -77,8 +77,7 @@ other_parameters = {
     "n_classes": 10,
 }
 
-
-total_ops = (
+layer1_ops = (
     layer_parameters[1]["dimx"]
     / kernel_parameters["stridex"]
     * layer_parameters[1]["dimy"]
@@ -88,6 +87,6 @@ total_ops = (
     * kernel_parameters["y"]
     * kernel_parameters["depth"]
 )
-ideal_execution_time = total_ops * system_latency_parameters["multiply"] * time_units
-print("Calculations required for layer 1: ", total_ops)
+ideal_execution_time = layer1_ops * system_latency_parameters["multiply"] * time_units
+print("Calculations required for layer 1: ", layer1_ops)
 print("total execution time: {} ns".format(round(ideal_execution_time, 4)))
